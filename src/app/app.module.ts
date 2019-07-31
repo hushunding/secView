@@ -10,18 +10,18 @@ import { SharedModule } from './shared/shared.module';
 
 import { AppRoutingModule } from './app-routing.module';
 
-// NG Translate
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { HomeModule } from './home/home.module';
 
 import { AppComponent } from './app.component';
+import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { registerLocaleData } from '@angular/common';
+import zh from '@angular/common/locales/zh';
 
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+registerLocaleData(zh);
+
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,15 +33,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     SharedModule,
     HomeModule,
     AppRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
+    BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

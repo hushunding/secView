@@ -1,16 +1,25 @@
-.container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+nz-header,
+nz-footer {
+  background: #7dbcea;
+  color: #fff;
+}
 
-  background: url(../../assets/background.jpg) no-repeat center fixed;
-  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-  background-size: cover; /* version standardisée */
+nz-footer {
+  line-height: 1.5;
+}
 
-  .title {
-    color: white;
-    margin: 0;
-    padding: 50px 20px;
-  }
+
+nz-content {
+  background: rgba(16, 142, 233, 1);
+  color: #fff;
+  min-height: 120px;
+  line-height: 120px;
+}
+
+nz-layout {
+  margin-bottom: 48px;
+}
+
+nz-layout:last-child {
+  margin: 0;
 }
