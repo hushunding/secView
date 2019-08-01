@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ElectronService } from '../core/services';
 
 // import * as initSqlJs from 'sql.js';
-// import 'sql.js';
+import { Database, QueryResults } from 'sql.js';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,8 +13,8 @@ export class DBDataService {
   }
 
 
-  loaddb(path: string) {
-    return new Promise((res, rej) => {
+  loaddb(path: string, sqltbale:string) {
+    return new Promise<QueryResults>((res, rej) => {
       const initSqlJs = this.es.remote.require('sql.js');
       initSqlJs().then(
         (SQL) => {
@@ -22,9 +22,13 @@ export class DBDataService {
             if (err) {
               rej(err);
             } else {
-              const db = new SQL.Database(data);
-              const result = db.exec(`SELECT * FROM "MyStor"`);
-              res(result);
+              const db: Database = new SQL.Database(data);
+              const result = db.exec(`SELECT * FROM ${sqltbale}`);
+              if (result.length > 0) {
+                res(result[0]);
+              } else {
+                rej('no data');
+              }
             }
           });
         },

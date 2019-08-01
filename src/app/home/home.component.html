@@ -1,7 +1,29 @@
-<nz-layout>
-  <nz-header>Header</nz-header>
-  <nz-content>
-    <span nz-text><code>{{DBDATA }}</code></span>
-  </nz-content>
-  <nz-footer>Footer</nz-footer>
-</nz-layout>
+<button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
+<br />
+<br />
+<nz-table #nzTable 
+nzVirtualScroll
+[nzVirtualItemSize]="50"
+[nzVirtualForTrackBy]="trackByIndex"
+[nzData]="tabledata" [nzLoading]="loading" 
+[nzFrontPagination]="false"
+[nzShowPagination]="false"
+[nzScroll]="{y: '480px' }"
+[nzVirtualMaxBufferPx] = "480"
+[nzVirtualMinBufferPx] = "400"
+>
+  <thead>
+    <tr>
+      <th>Index</th>
+      <th *ngFor="let til of DBDATA?.columns">{{til}}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      <ng-template nz-virtual-scroll let-data let-index="index">
+    <tr>
+      <td *ngFor= "let i of data"> <span *ngIf="isTextData(i)">{{i}}</span>  <img *ngIf="!isTextData(i)" [src]="toImage(i)" alt=""></td>
+    </tr>
+  </ng-template>
+  </tbody>
+</nz-table>
