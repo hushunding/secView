@@ -13,7 +13,7 @@ export class DBDataService {
   }
 
 
-  loaddb(path: string, sqltbale:string) {
+  loaddb(path: string, sqltbale: string) {
     return new Promise<QueryResults>((res, rej) => {
       const initSqlJs = this.es.remote.require('sql.js');
       initSqlJs().then(

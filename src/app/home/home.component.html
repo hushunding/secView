@@ -1,6 +1,11 @@
+
+<button nz-button (click)= SelectDBFile()>选择数据文件</button>
+<span nz-text>{{dbfilepath}}</span>
+<br />
 <button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
 <br />
 <br />
+<div *ngIf="viewname?.name==='pictrues'">
 <nz-table #nzTable 
 nzVirtualScroll
 [nzVirtualItemSize]="50"
@@ -22,8 +27,9 @@ nzVirtualScroll
   <tbody>
       <ng-template nz-virtual-scroll let-data let-index="index">
     <tr>
-      <td *ngFor= "let i of data"> <span *ngIf="isTextData(i)">{{i}}</span>  <img *ngIf="!isTextData(i)" [src]="toImage(i)" alt=""></td>
+      <td *ngFor="let item of data; let i=index"> <span *ngIf="isTextData(item)">{{item}}</span>  <img *ngIf="!isTextData(item)" [src]="toImage(item,data[0],i)" alt=""></td>
     </tr>
   </ng-template>
   </tbody>
 </nz-table>
+</div>
