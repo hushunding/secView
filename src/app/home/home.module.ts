@@ -5,10 +5,11 @@ import { HomeRoutingModule } from './home-routing.module';
 
 import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule, NzFormModule } from 'ng-zorro-antd';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, SharedModule, HomeRoutingModule, NgZorroAntdModule]
+  imports: [CommonModule, SharedModule, HomeRoutingModule, NgZorroAntdModule, NzFormModule, FormsModule]
 })
 export class HomeModule {}

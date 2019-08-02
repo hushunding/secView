@@ -5,6 +5,10 @@ import { ElectronService } from '../core/services';
 import { NzTableComponent } from 'ng-zorro-antd';
 import { fstat } from 'fs';
 
+interface viewTypeInfo {
+  table: string,
+  filtes: string[]
+}
 
 @Component({
   selector: 'app-home',
@@ -18,16 +22,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public DBDATA: QueryResults;
   loading = false;
+  loaded = false;
   tabledata: ValueType[][] = [];
+  filtes = new Map<string, ValueType[]>();
 
-  pictrues = {
-    table: 'pictrues'
+  pictrues: viewTypeInfo = {
+    table: 'pictrues',
+    filtes: ['name']
   };
-  MyStor = {
-    table: 'MyStor'
+  MyStor: viewTypeInfo = {
+    table: 'MyStor',
+    filtes: ['分类']
   };
   dbfilepath = '';
-  viewname = null;
+  viewname: viewTypeInfo = null;
+  searchValue = "";
 
   opendbdata(path: string) {
     this.viewname = path.endsWith('pic.db3') ? this.pictrues : path.endsWith('mystor.db') ? this.MyStor : null;
@@ -37,13 +46,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     this.dbfilepath = path;
     this.loading = true;
-    this.db.loaddb(path, this.viewname.table).then((DBDATA) => {
-      this.DBDATA = DBDATA;
-      this.tabledata = DBDATA.values as any;
-      for (let i = 0; i < this.tabledata.length; i++) {
-        this.tabledata[i].unshift(i);
+    this.db.loaddb(path, this.viewname.table, this.viewname.filtes).then(({ total, filteitems }) => {
+      this.DBDATA = total;
+      this.filtes = filteitems;
+
+      const tabledata = total.values as any;
+      for (let i = 0; i < tabledata.length; i++) {
+        tabledata[i].unshift(i);
       }
+      this.tabledata = tabledata;
       this.loading = false;
+      this.loaded = true;
     });
   }
   // MyStor
@@ -56,7 +69,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   toImage(item: Uint8Array, i: number, j: number) {
-    return ('');
     if (item !== null) {
       const img = this.es.nativeImage.createFromBuffer(Buffer.from(item.buffer));
       return (img.toDataURL());
@@ -65,7 +77,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
   scrollToIndex(index: number): void {
-    this.nzTableComponent.cdkVirtualScrollViewport.scrollToIndex(index);
+    // this.nzTableComponent.cdkVirtualScrollViewport.scrollToIndex(index);
   }
 
   ngAfterViewInit(): void {

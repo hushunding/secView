@@ -5,31 +5,35 @@
 <button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
 <br />
 <br />
-<div *ngIf="viewname?.name==='pictrues'">
+<div *ngIf="loaded">
+<span>过滤:</span>
+<div *ngFor="let k of viewname.filtes"> 
+  <span>{{k}}:</span>
+  <nz-select  style="width: 120px;" #sel name="value" [nzPlaceHolder]="k" nzAllowClear (ngModelChange)="search(k, $event)">
+    <nz-option
+      *ngFor="let item of filtes.get(k)"
+      [nzValue]="item"
+      [nzLabel]="item"
+    >
+    </nz-option>
+  </nz-select>
+</div>
+</div>
+
 <nz-table #nzTable 
-nzVirtualScroll
-[nzVirtualItemSize]="50"
-[nzVirtualForTrackBy]="trackByIndex"
-[nzData]="tabledata" [nzLoading]="loading" 
-[nzFrontPagination]="false"
-[nzShowPagination]="false"
-[nzScroll]="{y: '480px' }"
-[nzVirtualMaxBufferPx] = "480"
-[nzVirtualMinBufferPx] = "400"
+[nzData]="tabledata" [nzLoading]="loading"
+[nzShowQuickJumper] = true
 >
   <thead>
     <tr>
       <th>Index</th>
-      <th *ngFor="let til of DBDATA?.columns">{{til}}</th>
+      <th *ngFor="let til of DBDATA?.columns; let i=index">{{til}}</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-      <ng-template nz-virtual-scroll let-data let-index="index">
-    <tr>
+    <tr *ngFor="let data of nzTable.data;">
       <td *ngFor="let item of data; let i=index"> <span *ngIf="isTextData(item)">{{item}}</span>  <img *ngIf="!isTextData(item)" [src]="toImage(item,data[0],i)" alt=""></td>
     </tr>
-  </ng-template>
   </tbody>
 </nz-table>
-</div>
