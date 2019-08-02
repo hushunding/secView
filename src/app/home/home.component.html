@@ -21,7 +21,7 @@
 </div>
 
 <nz-table #nzTable 
-[nzData]="tabledata" [nzLoading]="loading"
+[nzData]="viewdata" [nzLoading]="loading"
 [nzShowQuickJumper] = true
 >
   <thead>
@@ -33,7 +33,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of nzTable.data;">
-      <td *ngFor="let item of data; let i=index"> <span *ngIf="isTextData(item)">{{item}}</span>  <img *ngIf="!isTextData(item)" [src]="toImage(item,data[0],i)" alt=""></td>
+      <td *ngFor="let item of data; let i=index"> <span *ngIf="item.t === 'raw'">{{item.v}}</span>  <img *ngIf="item.t === 'img'" [src]="item.v" alt=""></td>
     </tr>
   </tbody>
 </nz-table>
