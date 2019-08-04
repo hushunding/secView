@@ -5,6 +5,7 @@ export interface ViewTypeInfo {
     table: string;
     filtes: Array<FilterInfo>;
     pattern: string;
+    detailView: 'img' | 'video';
 }
 
 export interface TableEntry {
@@ -36,12 +37,14 @@ export class FilterInfo {
 }
 
 class PictrueInfo implements ViewTypeInfo {
+    detailView: 'img' | 'video' = 'img';
     table = 'pictrues';
     filtes = [new FilterInfo('name')];
     pattern = 'pic.db3';
 }
 
 class MyStorInfo implements ViewTypeInfo {
+    detailView: 'img' | 'video' = 'video';
     table = 'MyStor';
     filtes = [new FilterInfo('分类')];
     pattern = 'mystor.db';

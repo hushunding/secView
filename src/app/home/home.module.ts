@@ -7,9 +7,10 @@ import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { FormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [CommonModule, SharedModule, HomeRoutingModule, NgZorroAntdModule, FormsModule]
+  imports: [CommonModule, SharedModule, HomeRoutingModule, NgZorroAntdModule, FormsModule, ScrollingModule]
 })
 export class HomeModule {}

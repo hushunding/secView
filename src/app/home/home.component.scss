@@ -23,3 +23,20 @@ nz-layout {
 nz-layout:last-child {
   margin: 0;
 }
+
+.example-viewport {
+    height: 1024px;
+    width: 1024px;
+    border: 1px solid black;
+  }
+  
+  .example-viewport .cdk-virtual-scroll-content-wrapper {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .example-item {
+    width: 1024px;
+    height: 100%;
+    writing-mode: vertical-lr;
+  }

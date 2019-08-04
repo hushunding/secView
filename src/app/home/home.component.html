@@ -1,8 +1,10 @@
 
+ <div nz-row>
+    <div nz-col nzSpan="10">
 <button nz-button (click)= SelectDBFile()>选择数据文件</button>
 <span nz-text>{{dbfilepath}}</span>
-<br />
 <button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
+<button nz-button (click)="test()">测试</button>
 <br />
 <br />
 <div nz-row nzType="flex" nzJustify="start">
@@ -20,6 +22,8 @@
     </nz-option>
   </nz-select>
 </div>
+<nz-switch [(ngModel)]="isListView" name="picViewType" nzUnCheckedChildren="新窗口打开" nzCheckedChildren ="仅列表显示" ></nz-switch>
+<button nz-button (click)="imgpaths = []" nzType="danger">清除</button>
 </div>
 
 <nz-table #nzTable 
@@ -29,6 +33,8 @@ nzVirtualScroll
 [nzVirtualForTrackBy]="trackByIndex"
 [nzFrontPagination]="false"
 [nzShowPagination]="false"
+[nzVirtualMaxBufferPx]="480"
+[nzVirtualMinBufferPx]="400"
 [nzScroll]="{y: '480px' }"
 >
   <thead>
@@ -40,7 +46,7 @@ nzVirtualScroll
   </thead>
   <tbody>
     <ng-template nz-virtual-scroll let-data let-index="index">
-    <tr>
+    <tr (dblclick)="ClickEntry(data)">
       <td *ngFor="let item of data.v; let i=index;"> 
           <span *ngIf="item.t === 'raw'">{{item.v}}</span>  
           <img *ngIf="item.t === 'img'" [src]="item.v" alt=""></td>
@@ -48,3 +54,20 @@ nzVirtualScroll
     </ng-template>
   </tbody>
 </nz-table>
+</div>
+<div nz-col nzSpan="14">
+<div *ngIf="viewdata.viewType?.detailView==='img'">
+    <div>
+        <cdk-virtual-scroll-viewport #Piclist orientation="horizontal" itemSize="1024" class="example-viewport" 
+        (mousewheel)="onmousewheelOnPiclist(Piclist, $event)">
+            <div style="display: flex; flex-flow: row">
+                    <div *cdkVirtualFor="let item of imgpaths" class="example-item"> 
+                        <img [src]="item" [alt]="item" width="1024"></div>
+            </div>
+          
+        </cdk-virtual-scroll-viewport>
+      </div>
+</div>
+<video *ngIf="viewdata.viewType?.detailView==='video'" [src]="videopath" controls="controls" autoplay="autoplay" (error)="errorShow($event)"></video>
+</div>
+</div>
