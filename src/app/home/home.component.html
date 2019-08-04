@@ -5,13 +5,15 @@
 <button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
 <br />
 <br />
-<div *ngIf="loaded">
-<span>过滤:</span>
-<div *ngFor="let k of viewname.filtes"> 
-  <span>{{k}}:</span>
-  <nz-select  style="width: 120px;" #sel name="value" [nzPlaceHolder]="k" nzAllowClear (ngModelChange)="search(k, $event)">
+<div nz-row nzType="flex" nzJustify="start">
+<span  nz-col nzSpan="1">过滤: </span>
+<div *ngFor="let k of viewdata.viewType?.filtes"> 
+  <nz-select  
+  style="width: 300px"
+      nzMode="multiple"
+   #sel name="value" [nzPlaceHolder]="k.name" nzAllowClear [(ngModel)]="k.SelectArray">
     <nz-option
-      *ngFor="let item of filtes.get(k)"
+      *ngFor="let item of k.filteritems"
       [nzValue]="item"
       [nzLabel]="item"
     >
@@ -21,19 +23,28 @@
 </div>
 
 <nz-table #nzTable 
-[nzData]="viewdata" [nzLoading]="loading"
-[nzShowQuickJumper] = true
+nzVirtualScroll
+[nzVirtualItemSize]="54"
+[nzData]="viewdata.viewdata" [nzLoading]="loading"
+[nzVirtualForTrackBy]="trackByIndex"
+[nzFrontPagination]="false"
+[nzShowPagination]="false"
+[nzScroll]="{y: '480px' }"
 >
   <thead>
     <tr>
       <th>Index</th>
-      <th *ngFor="let til of DBDATA?.columns; let i=index">{{til}}</th>
+      <th *ngFor="let til of viewdata.columns; let i=index">{{til}}</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of nzTable.data;">
-      <td *ngFor="let item of data; let i=index"> <span *ngIf="item.t === 'raw'">{{item.v}}</span>  <img *ngIf="item.t === 'img'" [src]="item.v" alt=""></td>
+    <ng-template nz-virtual-scroll let-data let-index="index">
+    <tr>
+      <td *ngFor="let item of data.v; let i=index;"> 
+          <span *ngIf="item.t === 'raw'">{{item.v}}</span>  
+          <img *ngIf="item.t === 'img'" [src]="item.v" alt=""></td>
     </tr>
+    </ng-template>
   </tbody>
 </nz-table>
