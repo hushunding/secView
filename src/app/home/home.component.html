@@ -23,7 +23,7 @@
   </nz-select>
 </div>
 <nz-switch [(ngModel)]="isListView" name="picViewType" nzUnCheckedChildren="新窗口打开" nzCheckedChildren ="仅列表显示" ></nz-switch>
-<button nz-button (click)="imgpaths = []" nzType="danger">清除</button>
+<button nz-button (click)="imgpaths = [];videopath=''" nzType="danger">清除</button>
 </div>
 
 <nz-table #nzTable 
@@ -39,17 +39,16 @@ nzVirtualScroll
 >
   <thead>
     <tr>
-      <th>Index</th>
-      <th *ngFor="let til of viewdata.columns; let i=index">{{til}}</th>
+      <th *ngFor="let i of viewdata.viewType.showconums;">{{viewdata.columns[i]}}</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     <ng-template nz-virtual-scroll let-data let-index="index">
-    <tr (dblclick)="ClickEntry(data)">
-      <td *ngFor="let item of data.v; let i=index;"> 
-          <span *ngIf="item.t === 'raw'">{{item.v}}</span>  
-          <img *ngIf="item.t === 'img'" [src]="item.v" alt=""></td>
+    <tr (click)="ClickEntry(data)">
+      <td *ngFor="let i of viewdata.viewType.showconums;" > 
+          <span *ngIf="data.v[i].t === 'raw'">{{data.v[i].v}}</span>  
+          <img *ngIf="data.v[i].t === 'img'" [src]="data.v[i].v" alt=""></td>
     </tr>
     </ng-template>
   </tbody>
@@ -57,6 +56,7 @@ nzVirtualScroll
 </div>
 <div nz-col nzSpan="14">
 <div *ngIf="viewdata.viewType?.detailView==='img'">
+    <nz-slider [(ngModel)]="currentPicIndex" [nzMax]="imgpaths.length"  ></nz-slider>
     <div>
         <cdk-virtual-scroll-viewport #Piclist orientation="horizontal" itemSize="1024" class="example-viewport" 
         (mousewheel)="onmousewheelOnPiclist(Piclist, $event)">

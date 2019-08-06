@@ -31,9 +31,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     isListView = true;
 
     dbfilepath = '';
-    imgpaths = [];
+    imgpaths:string[] = [];
     filterview(filtername: string, filer: ValueType[]) {
-        const i = this.viewdata.columns.indexOf(filtername) + 1;
+        const i = this.viewdata.columns.indexOf(filtername);
         this.viewdata.viewdata = this.viewdata.tabledata.filter((v) => filer.indexOf(v.v[i].v) >= 0);
     }
     // 加载数据库
@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.viewdata = {
                 viewdata: tabledata,
                 tabledata,
-                columns: total.columns,
+                columns: ['Index', ...total.columns],
                 viewType
             };
             this.loading = false;
@@ -103,7 +103,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     SelectDBFile() {
         this.es.remote.dialog.showOpenDialog({
             title: '选择数据文件',
-            filters: [{ name: 'db文件', extensions: ['db', 'db3'] }]
+            filters: [{ name: 'db文件', extensions: ['db', 'db3'] }],
+            defaultPath: process.cwd()
         }).then(result => {
             if (result.filePaths.length !== 0) {
                 this.opendbdata(result.filePaths[0]);
@@ -124,7 +125,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
             if (!this.isListView && this.es.fs.existsSync(shtml)) {
                 window.open('file:' + shtml);
             }
-            this.imgpaths = this.es.fs.readdirSync(imgdir).map(v => ['file://', imgdir, v].join('/'));
+            const filelist = this.es.fs.readdirSync(imgdir);
+            this.imgpaths = [];
+            for (const f of filelist) {
+                const fullname = [imgdir, f].join('/');
+                if (this.es.fs.statSync(fullname).isDirectory()) {
+                    this.imgpaths =  this.imgpaths.concat(this.es.fs.readdirSync(fullname).map(v => ['file://', fullname, v].join('/')));
+                } else {
+                    this.imgpaths.push('file://' + fullname);
+                }
+            }
             this.currentPicIndex = 0;
         } else {
             this.imgpaths = [];
@@ -140,8 +150,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     onmousewheelOnPiclist(sender: CdkVirtualScrollViewport, $event: any) {
         const offset = $event.wheelDelta < 0 ? 1 : -1;
         this.currentPicIndex += offset;
-        if (this.currentPicIndex < 0) { this.currentPicIndex = 0; }
-        if (this.currentPicIndex >= this.imgpaths.length) { this.currentPicIndex = this.imgpaths.length - 1; }
+        if (this.currentPicIndex < 0) { this.currentPicIndex = this.imgpaths.length - 1; }
+        if (this.currentPicIndex >= this.imgpaths.length) { this.currentPicIndex = 0; }
         sender.scrollToIndex(this.currentPicIndex);
         $event.preventDefault();
     }
@@ -154,8 +164,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             console.log(err);
         });
     }
-    errorShow($event)
-    {
+    errorShow($event) {
         console.log($event);
     }
 

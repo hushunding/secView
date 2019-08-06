@@ -6,6 +6,7 @@ export interface ViewTypeInfo {
     filtes: Array<FilterInfo>;
     pattern: string;
     detailView: 'img' | 'video';
+    showconums: number[];
 }
 
 export interface TableEntry {
@@ -37,6 +38,7 @@ export class FilterInfo {
 }
 
 class PictrueInfo implements ViewTypeInfo {
+    showconums: number[] = [0, 1, 2,3];
     detailView: 'img' | 'video' = 'img';
     table = 'pictrues';
     filtes = [new FilterInfo('name')];
@@ -44,6 +46,7 @@ class PictrueInfo implements ViewTypeInfo {
 }
 
 class MyStorInfo implements ViewTypeInfo {
+    showconums = [0, 2, 3, 4];
     detailView: 'img' | 'video' = 'video';
     table = 'MyStor';
     filtes = [new FilterInfo('分类')];
