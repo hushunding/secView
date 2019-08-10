@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, EventEmitter } from '@angu
 import { DBDataService } from './dbdata.service';
 import { ValueType } from 'sql.js';
 import { ElectronService } from '../core/services';
-import { NzTableComponent } from 'ng-zorro-antd';
+import { NzTableComponent, NzMessageService } from 'ng-zorro-antd';
 import { ViewTypeInfo, pictrue, MyStor, TableEntry, ViewInfo } from './ViewInfo';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
@@ -16,9 +16,10 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 export class HomeComponent implements OnInit, AfterViewInit {
     currentPicIndex: number;
     videopath: string;
+    currfindIndex = 0;
 
 
-    constructor(private db: DBDataService, private es: ElectronService) {
+    constructor(private db: DBDataService, private es: ElectronService, private message: NzMessageService) {
     }
 
     @ViewChild('nzTable', { static: false }) nzTableComponent: NzTableComponent;
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     isListView = true;
 
     dbfilepath = '';
-    imgpaths:string[] = [];
+    imgpaths: string[] = [];
     filterview(filtername: string, filer: ValueType[]) {
         const i = this.viewdata.columns.indexOf(filtername);
         this.viewdata.viewdata = this.viewdata.tabledata.filter((v) => filer.indexOf(v.v[i].v) >= 0);
@@ -130,7 +131,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             for (const f of filelist) {
                 const fullname = [imgdir, f].join('/');
                 if (this.es.fs.statSync(fullname).isDirectory()) {
-                    this.imgpaths =  this.imgpaths.concat(this.es.fs.readdirSync(fullname).map(v => ['file://', fullname, v].join('/')));
+                    this.imgpaths = this.imgpaths.concat(this.es.fs.readdirSync(fullname).map(v => ['file://', fullname, v].join('/')));
                 } else {
                     this.imgpaths.push('file://' + fullname);
                 }
@@ -168,4 +169,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
         console.log($event);
     }
 
+    StartSerach(name: string, search: string) {
+        if (this.viewdata.viewType === null) {
+            return;
+        }
+        this.viewdata.viewdata[this.currfindIndex].attr = { 'ant-menu-item-selected': false };
+        const i = this.viewdata.columns.indexOf(name);
+        const currfindIndex = this.viewdata.tabledata.findIndex(
+            (v, index) => v.v[i].v.toString().indexOf(search) >= 0 && index > this.currfindIndex);
+        if (currfindIndex >= 0) {
+            this.scrollToIndex(currfindIndex);
+            this.currfindIndex = currfindIndex;
+            this.viewdata.viewdata[this.currfindIndex].attr = { 'ant-menu-item-selected': true };
+        } else {
+            this.currfindIndex = 0;
+            this.message.warning('查找失败，已到达底部');
+        }
+
+    }
+    searchInputEnter($event: KeyboardEvent, name: string, search: string) {
+        if ($event.key === 'Enter') {
+            this.StartSerach(name, search);
+        }
+    }
 }

@@ -40,3 +40,14 @@ nz-layout:last-child {
     height: 100%;
     writing-mode: vertical-lr;
   }
+  .img-responsive{
+    max-width: 128px;
+    height: 95px;
+    background-color:#fef9ff;/*背景色*/
+    overflow: hidden;
+    display: table-cell;
+}
+.img-responsive img {
+    width: 100%;
+    max-height: 100%;
+}

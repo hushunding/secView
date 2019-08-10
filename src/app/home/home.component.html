@@ -1,73 +1,67 @@
+<div nz-row>
+  <div nz-col nzSpan="10">
+    <button nz-button (click)=SelectDBFile()>选择数据文件</button>
+    <span nz-text>{{dbfilepath}}</span>
+    <nz-switch [(ngModel)]="isListView" name="picViewType" nzUnCheckedChildren="新窗口打开" nzCheckedChildren="仅列表显示">
+    </nz-switch>
+    <button nz-button (click)="imgpaths = [];videopath=''" nzType="danger">清除</button>
+    <button nz-button (click)="test()">测试</button>
+    <br />
+    <br />
+    <div nz-row nzType="flex" nzJustify="start">
+      <div  nz-col *ngFor="let k of viewdata.viewType?.filtes">
+        <nz-select style="width: 300px" nzMode="multiple" #sel name="value" [nzPlaceHolder]="'过滤:'+ k.name" nzAllowClear
+          [(ngModel)]="k.SelectArray">
+          <nz-option *ngFor="let item of k.filteritems" [nzValue]="item" [nzLabel]="item">
+          </nz-option>
+        </nz-select>
+      </div>
+        <input nz-col nz-input #searchInput placeholder="输入查找" style="width: 300px" (keypress)="searchInputEnter($event, viewdata.viewType?.searches, searchInput.value)">
+        <button nz-col nz-button (click)="StartSerach(viewdata.viewType?.searches, searchInput.value)">查找</button>
+    </div>
 
- <div nz-row>
-    <div nz-col nzSpan="10">
-<button nz-button (click)= SelectDBFile()>选择数据文件</button>
-<span nz-text>{{dbfilepath}}</span>
-<button nz-button (click)="scrollToIndex(200)">Scroll To Index 200</button>
-<button nz-button (click)="test()">测试</button>
-<br />
-<br />
-<div nz-row nzType="flex" nzJustify="start">
-<span  nz-col nzSpan="1">过滤: </span>
-<div *ngFor="let k of viewdata.viewType?.filtes"> 
-  <nz-select  
-  style="width: 300px"
-      nzMode="multiple"
-   #sel name="value" [nzPlaceHolder]="k.name" nzAllowClear [(ngModel)]="k.SelectArray">
-    <nz-option
-      *ngFor="let item of k.filteritems"
-      [nzValue]="item"
-      [nzLabel]="item"
-    >
-    </nz-option>
-  </nz-select>
-</div>
-<nz-switch [(ngModel)]="isListView" name="picViewType" nzUnCheckedChildren="新窗口打开" nzCheckedChildren ="仅列表显示" ></nz-switch>
-<button nz-button (click)="imgpaths = [];videopath=''" nzType="danger">清除</button>
-</div>
+    <nz-table #nzTable nzVirtualScroll [nzVirtualItemSize]="viewdata.viewType?.itemsize" [nzData]="viewdata.viewdata" [nzLoading]="loading"
+      [nzVirtualForTrackBy]="trackByIndex" [nzFrontPagination]="false" [nzShowPagination]="false"
+      [nzVirtualMaxBufferPx]="480" [nzVirtualMinBufferPx]="400" [nzScroll]="{y: '480px' }">
+      <thead>
+        <tr>
+          <th *ngFor="let i of viewdata.viewType?.showconums;" [style.width.px] ="viewdata.viewType?.tdwidth[i]">{{viewdata.columns[i]}}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-template nz-virtual-scroll let-data let-index="index">
+          <tr (click)="ClickEntry(data)"  [ngClass]="data.attr" [style.height.px]="viewdata.viewType?.itemsize">
+            <td *ngFor="let i of viewdata.viewType.showconums;" [style.width.px] ="viewdata.viewType?.tdwidth[i]" >
+              <span *ngIf="data.v[i].t === 'raw'">{{data.v[i].v}}</span>
+              <div *ngIf="data.v[i].t === 'img'"class="img-responsive">
+              <img  [src]="data.v[i].v" alt="">
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </nz-table>
+  </div>
+  <div nz-col nzSpan="14">
+    <div *ngIf="viewdata.viewType?.detailView==='img'">
+      <nz-slider [(ngModel)]="currentPicIndex" [nzMax]="imgpaths.length"></nz-slider>
+      <div>
+        <cdk-virtual-scroll-viewport #Piclist orientation="horizontal" itemSize="1024" class="example-viewport"
+          (mousewheel)="onmousewheelOnPiclist(Piclist, $event)">
+          <div style="display: flex; flex-flow: row">
+            <div *cdkVirtualFor="let item of imgpaths" class="example-item">
+              <img [src]="item" [alt]="item" width="1024"></div>
+          </div>
 
-<nz-table #nzTable 
-nzVirtualScroll
-[nzVirtualItemSize]="54"
-[nzData]="viewdata.viewdata" [nzLoading]="loading"
-[nzVirtualForTrackBy]="trackByIndex"
-[nzFrontPagination]="false"
-[nzShowPagination]="false"
-[nzVirtualMaxBufferPx]="480"
-[nzVirtualMinBufferPx]="400"
-[nzScroll]="{y: '480px' }"
->
-  <thead>
-    <tr>
-      <th *ngFor="let i of viewdata.viewType.showconums;">{{viewdata.columns[i]}}</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-template nz-virtual-scroll let-data let-index="index">
-    <tr (click)="ClickEntry(data)">
-      <td *ngFor="let i of viewdata.viewType.showconums;" > 
-          <span *ngIf="data.v[i].t === 'raw'">{{data.v[i].v}}</span>  
-          <img *ngIf="data.v[i].t === 'img'" [src]="data.v[i].v" alt=""></td>
-    </tr>
-    </ng-template>
-  </tbody>
-</nz-table>
-</div>
-<div nz-col nzSpan="14">
-<div *ngIf="viewdata.viewType?.detailView==='img'">
-    <nz-slider [(ngModel)]="currentPicIndex" [nzMax]="imgpaths.length"  ></nz-slider>
-    <div>
-        <cdk-virtual-scroll-viewport #Piclist orientation="horizontal" itemSize="1024" class="example-viewport" 
-        (mousewheel)="onmousewheelOnPiclist(Piclist, $event)">
-            <div style="display: flex; flex-flow: row">
-                    <div *cdkVirtualFor="let item of imgpaths" class="example-item"> 
-                        <img [src]="item" [alt]="item" width="1024"></div>
-            </div>
-          
         </cdk-virtual-scroll-viewport>
       </div>
-</div>
-<video *ngIf="viewdata.viewType?.detailView==='video'" [src]="videopath" controls="controls" autoplay="autoplay" (error)="errorShow($event)"></video>
-</div>
+    </div>
+    <div *ngIf="viewdata.viewType?.detailView==='video'" cdkDrag>
+        <i nz-icon nzType="close-circle" nzTheme="outline" (click)="videopath=null"></i>
+        <br/>
+      <video [src]="videopath" controls="controls" autoplay="autoplay" (error)="errorShow($event)" width="512"></video>
+    </div>
+
+  </div>
 </div>
