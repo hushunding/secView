@@ -80,12 +80,13 @@
     "typescript": "~3.4.5",
     "wait-on": "3.2.0",
     "webdriver-manager": "12.1.5",
-    "zone.js": "0.9.1"
+    "zone.js": "0.9.1",
+    "sql.js": "^1.0.0"
   },
   "engines": {
     "node": ">=10.9.0"
   },
   "dependencies": {
-    "sql.js": "^1.0.0"
+
   }
 }

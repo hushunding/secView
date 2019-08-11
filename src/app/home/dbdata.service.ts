@@ -15,7 +15,7 @@ export class DBDataService {
 
   loaddb(path: string, sqltbale: string, filtes: FilterInfo[]) {
     return new Promise<{ total: QueryResults}>((res, rej) => {
-      const initSqlJs = this.es.remote.require('sql.js');
+      const initSqlJs = this.es.remote.require('./sql.js');
       initSqlJs().then(
         (SQL) => {
           this.es.fs.readFile(path, (err, data) => {
