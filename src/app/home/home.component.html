@@ -6,6 +6,7 @@
     </nz-switch>
     <button nz-button (click)="imgpaths = [];videopath=''" nzType="danger">清除</button>
     <button nz-button (click)="test()">测试</button>
+    <button nz-button (click)="close()">关闭</button>
     <br />
     <br />
     <div nz-row nzType="flex" nzJustify="start">
@@ -22,7 +23,7 @@
 
     <nz-table #nzTable nzVirtualScroll [nzVirtualItemSize]="viewdata.viewType?.itemsize" [nzData]="viewdata.viewdata" [nzLoading]="loading"
       [nzVirtualForTrackBy]="trackByIndex" [nzFrontPagination]="false" [nzShowPagination]="false"
-      [nzVirtualMaxBufferPx]="480" [nzVirtualMinBufferPx]="400" [nzScroll]="{y: '480px' }">
+      [nzVirtualMaxBufferPx]="640" [nzVirtualMinBufferPx]="600" [nzScroll]="{y: '640px' }">
       <thead>
         <tr>
           <th *ngFor="let i of viewdata.viewType?.showconums;" [style.width.px] ="viewdata.viewType?.tdwidth[i]">{{viewdata.columns[i]}}</th>
@@ -45,6 +46,7 @@
   </div>
   <div nz-col nzSpan="14">
     <div *ngIf="viewdata.viewType?.detailView==='img'">
+      <h4 nz-title>{{showtitle}}</h4>
       <nz-slider [(ngModel)]="currentPicIndex" [nzMax]="imgpaths.length"></nz-slider>
       <div>
         <cdk-virtual-scroll-viewport #Piclist orientation="horizontal" itemSize="1024" class="example-viewport"
@@ -58,9 +60,15 @@
       </div>
     </div>
     <div *ngIf="viewdata.viewType?.detailView==='video'" cdkDrag>
-        <i nz-icon nzType="close-circle" nzTheme="outline" (click)="videopath=null"></i>
-        <br/>
-      <video [src]="videopath" controls="controls" autoplay="autoplay" (error)="errorShow($event)" width="512"></video>
+        <h4 nz-title>
+          <i nz-icon nzType="close-circle" (click)="videopath=null"></i>
+          <span>{{showtitle}} </span>
+          <i nz-icon nzType="double-right" (click)="videosize = 1024"></i>
+          <i nz-icon nzType="double-left" (click)="videosize = 512"></i>
+        </h4>
+      <video [src]="videopath" controls="controls" autoplay="autoplay" (error)="errorShow($event)" [width]="videosize"></video>
+      <br/>
+      <button *ngIf="userExterntools && videopath!==null" nz-button (click)="openwithexterntools()">使用外部播放器打开</button>
     </div>
 
   </div>

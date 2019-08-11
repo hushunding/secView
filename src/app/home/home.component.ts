@@ -16,7 +16,10 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 export class HomeComponent implements OnInit, AfterViewInit {
     currentPicIndex: number;
     videopath: string;
+    videosize = 512;
     currfindIndex = 0;
+    showtitle: ValueType;
+    userExterntools = false;
 
 
     constructor(private db: DBDataService, private es: ElectronService, private message: NzMessageService) {
@@ -119,6 +122,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         let basepath = this.dbfilepath.split(/[\/\\]/);
         basepath = basepath.slice(0, basepath.length - 1);
         if (this.viewdata.viewType.detailView === 'img') {
+            this.showtitle = data.v[3].v;
             const filepath1 = (data.v[4].v as string).split(/[\/\\]/);
             const imgpath = [...basepath, ...filepath1];
             const shtml = [...imgpath, 'page_s.html'].join('/');
@@ -141,9 +145,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.imgpaths = [];
         }
         if (this.viewdata.viewType.detailView === 'video') {
+            this.showtitle = data.v[2].v;
             const storname = data.v[1].v;
             const ext = (data.v[2].v as string).split('.').pop();
             this.videopath = ['file://', ...basepath, 'store', storname[0], storname + '.' + ext].join('/');
+            this.userExterntools = false;
         } else {
             this.videopath = '';
         }
@@ -165,8 +171,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
             console.log(err);
         });
     }
+    close() {
+        window.close();
+    }
     errorShow($event) {
         console.log($event);
+        this.userExterntools = true;
+    }
+    openwithexterntools() {
+        this.es.fs.promises.readFile('./setting.json', { encoding: 'utf8' }).then((str) => {
+            const mplay = JSON.parse(str).mplay;
+            this.es.childProcess.exec(`${mplay} ${this.videopath}`);
+        })
     }
 
     StartSerach(name: string, search: string) {

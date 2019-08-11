@@ -6,6 +6,7 @@
     "files": [
         "**/*",
         "!**/*.ts",
+        "!**/*.js.map",
         "!*.code-workspace",
         "!LICENSE.md",
         "!package.json",

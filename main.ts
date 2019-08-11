@@ -21,6 +21,7 @@ function createWindow() {
             nodeIntegration: true,
             webSecurity: false
         },
+        frame: false
     });
 
     if (serve) {
