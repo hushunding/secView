@@ -20,6 +20,9 @@
         "!tsconfig.json",
         "!tslint.json"
     ],
+    "extraFiles":[
+      "setting.json"
+    ],
   "win": {
     "icon": "dist",
     "target": [
