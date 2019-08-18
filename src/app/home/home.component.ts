@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit, EventEmitter } from '@angular/core';
 import { DBDataService } from './dbdata.service';
-import { ValueType } from 'sql.js';
 import { ElectronService } from '../core/services';
 import { NzTableComponent, NzMessageService } from 'ng-zorro-antd';
-import { ViewTypeInfo, pictrue, MyStor, TableEntry, ViewInfo } from './ViewInfo';
+import { ViewTypeInfo, pictrue, MyStor, TableEntry, ViewInfo, ValueType } from './ViewInfo';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 
@@ -33,6 +32,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     viewdata = new ViewInfo();
     viewList = [pictrue, MyStor];
     isListView = true;
+    get dbErr() {
+        return this.db.SQLErr;
+    }
 
     dbfilepath = '';
     imgpaths: string[] = [];
@@ -182,7 +184,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.es.fs.promises.readFile('./setting.json', { encoding: 'utf8' }).then((str) => {
             const mplay = JSON.parse(str).mplay;
             this.es.childProcess.exec(`${mplay} ${this.videopath}`);
-        })
+        });
     }
 
     StartSerach(name: string, search: string) {

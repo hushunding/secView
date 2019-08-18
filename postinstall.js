@@ -16,15 +16,15 @@ fs.readFile(f_angular, 'utf8', function (err, data) {
   });
 });
 
-const sqljs = 'node_modules/sql.js/package.json';
+// const sqljs = 'node_modules/sql.js/package.json';
 
-(async ()=>{
-    const data = await fs.promises.readFile(sqljs, {encoding:'utf8'});
-    const main = JSON.parse(data).main
-    const srcjs = path.join(path.dirname(sqljs), main);
-    const wasm = path.join(path.dirname(srcjs), 'sql-wasm.wasm');
-    await fs.promises.copyFile(srcjs, './sql.js')
-    await fs.promises.copyFile(wasm, `./sql-wasm.wasm`)
-})().catch(err=>{
-  console.log(err)
-})
+// (async ()=>{
+//     const data = await fs.promises.readFile(sqljs, {encoding:'utf8'});
+//     const main = JSON.parse(data).main
+//     const srcjs = path.join(path.dirname(sqljs), main);
+//     const wasm = path.join(path.dirname(srcjs), 'sql-wasm.wasm');
+//     await fs.promises.copyFile(srcjs, './sql.js')
+//     await fs.promises.copyFile(wasm, `./sql-wasm.wasm`)
+// })().catch(err=>{
+//   console.log(err)
+// })

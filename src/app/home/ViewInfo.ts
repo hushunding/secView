@@ -1,6 +1,7 @@
-import { ValueType } from 'sql.js';
 import { EventEmitter } from '@angular/core';
+import { SqlJs } from 'sql.js/module';
 
+export type ValueType = SqlJs.ValueType;
 export interface ViewTypeInfo {
     table: string;
     filtes: Array<FilterInfo>;

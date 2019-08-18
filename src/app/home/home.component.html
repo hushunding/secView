@@ -1,7 +1,7 @@
 <div nz-row>
   <div nz-col nzSpan="10">
     <button nz-button (click)=SelectDBFile()>选择数据文件</button>
-    <span nz-text>{{dbfilepath}}</span>
+    <span nz-text>{{dbfilepath}} {{dbErr}}</span>
     <nz-switch [(ngModel)]="isListView" name="picViewType" nzUnCheckedChildren="新窗口打开" nzCheckedChildren="仅列表显示">
     </nz-switch>
     <button nz-button (click)="imgpaths = [];videopath=''" nzType="danger">清除</button>
