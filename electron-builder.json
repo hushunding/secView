@@ -38,7 +38,7 @@
   "linux": {
     "icon": "dist",
     "target": [
-      "dir"
+      "tar.xz"
     ]
   }
 }
