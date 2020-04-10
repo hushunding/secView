@@ -5,7 +5,8 @@ const path = require('path');
 if (false) {
 }
 else {
-    const [_, SecretId, SecretKey ] = process.argv
+    const [SecretId, SecretKey ] = process.argv.splice(2)
+    console.log(SecretId, SecretKey)
     const cos = new COS({ SecretId, SecretKey });
     const distpath = {
         Bucket: 'mysecret-1256571816',
@@ -23,7 +24,7 @@ else {
             })
         }
     }
-    
+
     Promise.all(uploadfiles.map(v => new Promise((resolve, reject) => {
         cos.putObject({
             ...distpath,
