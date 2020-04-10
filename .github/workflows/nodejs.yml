@@ -32,5 +32,6 @@ jobs:
         key: secView
     - run: npm install
     - run: npm run electron:linux --if-present
+    - run: node ./deploy.js ${{secrets.SecretId}} ${{secrets.SecretKey}}
       env:
         CI: true
