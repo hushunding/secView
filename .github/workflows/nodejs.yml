@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,8 @@ jobs:
       uses: actions/cache@v1.1.2
       with:
         # A directory to store and save the cache
-        path: node_modules 
+        path: node_modules
+        key: secView
     - run: npm ci
     - run: npm run electron:linux --if-present
       env:
