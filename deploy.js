@@ -11,7 +11,7 @@ else {
         Bucket: 'mysecret-1256571816',
         Region: 'ap-shanghai',
     }
-    const dist = 'release'
+    const release = 'release'
     const files = fs.readdirSync(dist);
     let uploadfiles = [];
 
