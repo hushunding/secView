@@ -30,7 +30,7 @@ jobs:
         # A directory to store and save the cache
         path: node_modules
         key: secView
-    - run: npm ci
+    - run: npm install
     - run: npm run electron:linux --if-present
       env:
         CI: true
