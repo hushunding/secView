@@ -12,7 +12,7 @@ else {
         Region: 'ap-shanghai',
     }
     const release = 'release'
-    const files = fs.readdirSync(dist);
+    const files = fs.readdirSync(release);
     let uploadfiles = [];
 
     for (const file of files) {
